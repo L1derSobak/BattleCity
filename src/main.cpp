@@ -25,7 +25,7 @@ int main(void)
     }
 
     glfwSetWindowSizeCallback(window, glfwWindowSizeCallback);
-    glfwSetKeyCallback(window, &glfwKeyCallback);
+    glfwSetKeyCallback(window, glfwKeyCallback);
 
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
@@ -62,13 +62,12 @@ void glfwWindowSizeCallback(GLFWwindow* pWindow, GLint width, GLint height)
     g_WindowSizeX = width;
     g_WindowSizeY = height;
     glViewport(0, 0, g_WindowSizeX, g_WindowSizeY);
-    std::cout << "IT CHANGED!!!!" << std::endl;
+    
 }
 
 void glfwKeyCallback(GLFWwindow* pWindow, GLint key, GLint scancode, GLint action, GLint mode)
 {
-    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-    {
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)  
         glfwSetWindowShouldClose(pWindow, GL_TRUE);
-    }
+   
 }
