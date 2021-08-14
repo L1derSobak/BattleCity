@@ -5,7 +5,7 @@
 #include <iostream>
 
 GLfloat point[] = { 0.0f, 0.5f, 0.0f, 0.5f, -0.5f, 0.0f, -0.5f, -0.5f, 0.0f };
-GLfloat colors[] = { 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f };
+GLfloat colors[] = { 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f };
 
 const GLchar* vertex_shader =
 "#version 460\n"
@@ -68,7 +68,7 @@ int main(void)
     Renderer::ShaderProgram shaderProgram(vertexShader, fragment_shader);
     if (!shaderProgram.isCompiled())
     {
-        std::cerr << "Can't create shader program!" << std::endl;
+        std::cerr << "Can't create shader program!\n" << std::endl;
         return -1;
     }
 
