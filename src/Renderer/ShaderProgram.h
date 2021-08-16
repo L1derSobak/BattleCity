@@ -10,18 +10,18 @@ namespace Renderer {
 	public:
 
 		ShaderProgram(const std::string& vertexShader, const std::string& fragmentShader);
+		
+
+		bool isCompiled() const { return m_isCompiled; }
+		void use() const;
+		
+		~ShaderProgram();
+	private:
 		ShaderProgram() = delete;
 		ShaderProgram(ShaderProgram&) = delete;
 		ShaderProgram& operator = (const ShaderProgram&) = delete;
 		ShaderProgram& operator = (ShaderProgram&& shaderProgram) noexcept;
 		ShaderProgram(ShaderProgram&& shaderProgram) noexcept;
-		~ShaderProgram();
-
-		bool isCompiled() const { return m_isCompiled; }
-		void use() const;
-		
-
-	private:
 
 		bool createShader(const std::string& source, const GLenum shaderType, GLuint& shaderID);
 		bool m_isCompiled = false;
