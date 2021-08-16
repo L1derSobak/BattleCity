@@ -5,6 +5,10 @@
 #include <fstream>
 #include <iostream>
 
+#define STB_IMAGE_IMPLEMENTATION
+#define STIBI_ONLY_PNG //JPEG
+#include "stb_image.h"
+
 ResourceManager::ResourceManager(const std::string& executablePath)
 {
     size_t found = executablePath.find_last_of("/\\");
@@ -55,7 +59,6 @@ std::shared_ptr<Renderer::ShaderProgram> ResourceManager::loadShaders(const std:
     return nullptr;
 }
 
-
 std::shared_ptr<Renderer::ShaderProgram> ResourceManager::getShaderProgram(const std::string& shaderName)
 {
     ShaderProgramsMap::const_iterator it = m_shaderPrograms.find(shaderName);
@@ -65,4 +68,22 @@ std::shared_ptr<Renderer::ShaderProgram> ResourceManager::getShaderProgram(const
     }
     std::cerr << "Can't find the shader program: " << shaderName << std::endl;
     return nullptr;
+}
+
+void ResourceManager::loadTexture(const std::string& textureName, const std::string& texturePath)
+{
+    int channelsAmount = 0;
+    int width = 0;
+    int height = 0;
+
+    stbi_set_flip_vertically_on_load(true);
+    unsigned char* pixels = stbi_load(std::string(m_path + "/" + texturePath).c_str(), &width, &height, &channelsAmount, 0);
+
+    if (!pixels)
+    {
+        std::cerr << "Can't load image: " << texturePath << std::endl;
+        return;
+    }
+
+    stbi_image_free(pixels);
 }
