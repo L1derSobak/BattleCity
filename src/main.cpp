@@ -1,8 +1,8 @@
 ﻿/*
 	       ╔══════════════════════════════════╗
-	       ║	   CREATED BY L1derSobak      ║  
+	       ║      CREATED BY L1derSobak       ║  
 	       ║   Date of creating: Aug 11, 2021 ║ 
-           ╚══════════════════════════════════╝
+               ╚══════════════════════════════════╝
 */
 
 #include <glad/glad.h>
