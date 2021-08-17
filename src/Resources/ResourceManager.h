@@ -1,4 +1,12 @@
-#pragma once
+﻿#pragma once
+
+/*
+           ╔══════════════════════════════════╗
+           ║	   CREATED BY L1derSobak      ║
+           ║   Date of creating: Aug 14, 2021 ║
+           ╚══════════════════════════════════╝
+*/
+
 
 #include <string>
 #include <memory>
@@ -15,12 +23,6 @@ class ResourceManager {
 public:
     ResourceManager(const std::string& executablePath);
     
-
-    ResourceManager(const ResourceManager&) = delete;
-    ResourceManager& operator=(const ResourceManager&) = delete;
-    ResourceManager& operator=(ResourceManager&&) = delete;
-    ResourceManager(ResourceManager&&) = delete;
-
     std::shared_ptr<Renderer::ShaderProgram> loadShaders(const std::string& shaderName, const std::string& vertexPath, const std::string& fragmentPath);
     std::shared_ptr<Renderer::ShaderProgram> getShaderProgram(const std::string& shaderName);
 
@@ -29,13 +31,18 @@ public:
 
     ~ResourceManager() = default;
 private:
+    ResourceManager(const ResourceManager&) = delete;
+    ResourceManager& operator=(const ResourceManager&) = delete;
+    ResourceManager& operator=(ResourceManager&&) = delete;
+    ResourceManager(ResourceManager&&) = delete;
+
     std::string getFileString(const std::string& relativeFilePath) const;
 
-    typedef std::map<const std::string, std::shared_ptr<Renderer::ShaderProgram>> ShaderProgramsMap;
-    ShaderProgramsMap m_shaderPrograms;
+    typedef std::map<const std::string, std::shared_ptr<Renderer::ShaderProgram>> shaderProgramsMap;
+    shaderProgramsMap shaderPrograms;
 
-    typedef std::map<const std::string, std::shared_ptr<Renderer::Texture2D>> TexturesMap;
-    TexturesMap textures;
+    typedef std::map<const std::string, std::shared_ptr<Renderer::Texture2D>> texturesMap;
+    texturesMap textures;
 
-    std::string m_path;
+    std::string path;
 };

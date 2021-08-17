@@ -1,3 +1,11 @@
+﻿/*
+		   ╔══════════════════════════════════╗
+		   ║	   CREATED BY L1derSobak      ║
+		   ║   Date of creating: Aug 14, 2021 ║
+		   ╚══════════════════════════════════╝
+*/
+
+
 #include "ShaderProgram.h"
 #include <iostream>
 
@@ -23,17 +31,17 @@ namespace Renderer
 			return;
 		}
 
-		m_ID = glCreateProgram();
-		glAttachShader(m_ID, vertexShaderID);
-		glAttachShader(m_ID, fragmentShaderID);
-		glLinkProgram(m_ID);
+		ID = glCreateProgram();
+		glAttachShader(ID, vertexShaderID);
+		glAttachShader(ID, fragmentShaderID);
+		glLinkProgram(ID);
 
 		GLint success;
-		glGetProgramiv(m_ID, GL_LINK_STATUS, &success);
+		glGetProgramiv(ID, GL_LINK_STATUS, &success);
 		if (!success)
 		{
 			GLchar infolog[1024];
-			glGetShaderInfoLog(m_ID, 1024, nullptr, infolog);
+			glGetShaderInfoLog(ID, 1024, nullptr, infolog);
 			std::cerr << "ERROR::SHADER: Link-time error:\n" << infolog << std::endl;
 			return;
 		}
@@ -67,21 +75,21 @@ namespace Renderer
 
 	ShaderProgram::~ShaderProgram()
 	{
-		glDeleteProgram(m_ID);
+		glDeleteProgram(ID);
 	}
 
 	void ShaderProgram::use() const
 	{
-		glUseProgram(m_ID);
+		glUseProgram(ID);
 	}
 
 	ShaderProgram& ShaderProgram::operator = (ShaderProgram&& shaderProgram) noexcept
 	{
-		glDeleteProgram(m_ID);
-		m_ID = shaderProgram.m_ID;
+		glDeleteProgram(ID);
+		ID = shaderProgram.ID;
 		m_isCompiled = shaderProgram.m_isCompiled;
 
-		shaderProgram.m_ID = 0;
+		shaderProgram.ID = 0;
 		shaderProgram.m_isCompiled = false;
 		
 		return *this;
@@ -89,10 +97,10 @@ namespace Renderer
 
 	ShaderProgram::ShaderProgram (ShaderProgram&& shaderProgram) noexcept
 	{
-		m_ID = shaderProgram.m_ID;
+		ID = shaderProgram.ID;
 		m_isCompiled = shaderProgram.m_isCompiled;
 
-		shaderProgram.m_ID = 0;
+		shaderProgram.ID = 0;
 		shaderProgram.m_isCompiled = false;
 	}
-}
+}   

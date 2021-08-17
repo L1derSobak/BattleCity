@@ -1,3 +1,11 @@
+﻿/*
+		   ╔══════════════════════════════════╗
+		   ║	   CREATED BY L1derSobak      ║
+		   ║   Date of creating: Aug 16, 2021 ║
+		   ╚══════════════════════════════════╝
+*/
+
+
 #include "Texture2D.h"
 
 namespace Renderer
@@ -17,8 +25,8 @@ namespace Renderer
 			mode = GL_RGBA;
 			break;
 		}
-		glGenTextures(1, &m_ID);
-		glBindTexture(GL_TEXTURE_2D, m_ID);
+		glGenTextures(1, &ID);
+		glBindTexture(GL_TEXTURE_2D, ID);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, mode, GL_UNSIGNED_BYTE, data);
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrapMode);
@@ -32,9 +40,9 @@ namespace Renderer
 	
 	Texture2D& Texture2D::operator = (Texture2D&& texture2d)
 	{
-		glDeleteTextures(1, &m_ID);
-		m_ID = texture2d.m_ID;
-		texture2d.m_ID = 0;
+		glDeleteTextures(1, &ID);
+		ID = texture2d.ID;
+		texture2d.ID = 0;
 		mode = texture2d.mode;
 		width = texture2d.width;
 		height = texture2d.height;
@@ -43,8 +51,8 @@ namespace Renderer
 
 	Texture2D::Texture2D(Texture2D&& texture2d)
 	{
-		m_ID = texture2d.m_ID;
-		texture2d.m_ID = 0;
+		ID = texture2d.ID;
+		texture2d.ID = 0;
 		mode = texture2d.mode;
 		width = texture2d.width;
 		height = texture2d.height;
@@ -52,12 +60,12 @@ namespace Renderer
 
 	void Texture2D::bind() const
 	{
-		glBindTexture(GL_TEXTURE_2D, m_ID);
+		glBindTexture(GL_TEXTURE_2D, ID);
 	}
 
 	Texture2D::~Texture2D()
 	{
-		glDeleteTextures(1, &m_ID);
+		glDeleteTextures(1, &ID);
 	}
 
 }

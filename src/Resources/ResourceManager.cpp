@@ -1,3 +1,10 @@
+﻿/*
+           ╔══════════════════════════════════╗
+           ║	   CREATED BY L1derSobak      ║
+           ║   Date of creating: Aug 16, 2021 ║
+           ╚══════════════════════════════════╝
+*/
+
 #include "ResourceManager.h"
 #include "../Renderer/ShaderProgram.h"
 #include "../Renderer/Texture2D.h"
@@ -13,13 +20,13 @@
 ResourceManager::ResourceManager(const std::string& executablePath)
 {
     size_t found = executablePath.find_last_of("/\\");
-    m_path = executablePath.substr(0, found);
+    path = executablePath.substr(0, found);
 }
 
 std::string ResourceManager::getFileString(const std::string& relativeFilePath) const
 {
     std::ifstream f;
-    f.open(m_path + "/" + relativeFilePath.c_str(), std::ios::in | std::ios::binary);
+    f.open(path + "/" + relativeFilePath.c_str(), std::ios::in | std::ios::binary);
     if (!f.is_open())
     {
         std::cerr << "Failed to open file: " << relativeFilePath << std::endl;
@@ -47,7 +54,7 @@ std::shared_ptr<Renderer::ShaderProgram> ResourceManager::loadShaders(const std:
         return nullptr;
     }
 
-    std::shared_ptr<Renderer::ShaderProgram>& newShader = m_shaderPrograms.emplace(shaderName, std::make_shared<Renderer::ShaderProgram>(vertexString, fragmentxString)).first->second;
+    std::shared_ptr<Renderer::ShaderProgram>& newShader = shaderPrograms.emplace(shaderName, std::make_shared<Renderer::ShaderProgram>(vertexString, fragmentxString)).first->second;
     if (newShader->isCompiled())
     {
         return newShader;
@@ -62,8 +69,8 @@ std::shared_ptr<Renderer::ShaderProgram> ResourceManager::loadShaders(const std:
 
 std::shared_ptr<Renderer::ShaderProgram> ResourceManager::getShaderProgram(const std::string& shaderName)
 {
-    ShaderProgramsMap::const_iterator it = m_shaderPrograms.find(shaderName);
-    if (it != m_shaderPrograms.end())
+    shaderProgramsMap::const_iterator it = shaderPrograms.find(shaderName);
+    if (it != shaderPrograms.end())
     {
         return it->second;
     }
@@ -78,7 +85,7 @@ std::shared_ptr<Renderer::Texture2D> ResourceManager::loadTexture(const std::str
     int height = 0;
 
     stbi_set_flip_vertically_on_load(true);
-    unsigned char* pixels = stbi_load(std::string(m_path + "/" + texturePath).c_str(), &width, &height, &channelsAmount, 0);
+    unsigned char* pixels = stbi_load(std::string(path + "/" + texturePath).c_str(), &width, &height, &channelsAmount, 0);
 
     if (!pixels)
     {
@@ -94,7 +101,7 @@ std::shared_ptr<Renderer::Texture2D> ResourceManager::loadTexture(const std::str
 
 std::shared_ptr<Renderer::Texture2D> ResourceManager::getTexture(const std::string& textureName)
 {
-    TexturesMap::const_iterator it = textures.find(textureName);
+    texturesMap::const_iterator it = textures.find(textureName);
     if (it != textures.end())
     {
         return it->second;
