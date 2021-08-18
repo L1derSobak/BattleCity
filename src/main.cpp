@@ -9,13 +9,16 @@
 #include <GLFW/glfw3.h>
 #include "Renderer/ShaderProgram.h"
 #include "Resources/ResourceManager.h"
+#include "Renderer/Texture2D.h"
 
 #include <iostream>
 
 //Cords of triangle's vertex
 GLfloat point[] = { 0.0f, 0.5f, 0.0f, 0.5f, -0.5f, 0.0f, -0.5f, -0.5f, 0.0f };
-//Color of triangle's vertex
+//RGB color of triangle's vertex
 GLfloat colors[] = { 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f };
+//Coords of triangle's vertexes for texture
+GLfloat textureCoords[] = { 0.5f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f };
 
 //default Width and height of window
 GLint windowSizeX = 640;
@@ -29,7 +32,7 @@ int main(int argc, char** argv)
 {
 	GLFWwindow* window;
 
-	// Initialize the library 
+	// Initialize the library                                        
 	if (!glfwInit())
 		return -1;
 
@@ -72,12 +75,24 @@ int main(int argc, char** argv)
 		return -1;
 	}
 		
-	resourceManager.loadTexture("DefaultTexture", "textures/texture.png");
+	auto tex = resourceManager.loadTexture("DefaultTexture", "textures/texture.png");
 	
 	//Creating ID for vertex array object
 	GLuint vertexArrayObject = 0;
 	prepareShaders(vertexArrayObject);
 	
+	GLuint texCoordsVbo = 0;
+	glGenBuffers(1, &texCoordsVbo);
+	glBindBuffer(GL_ARRAY_BUFFER, texCoordsVbo);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(textureCoords), textureCoords, GL_STATIC_DRAW);
+
+	glEnableVertexAttribArray(2);
+	glBindBuffer(GL_ARRAY_BUFFER, texCoordsVbo);
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
+
+	defaultShaderProgram->use();
+	defaultShaderProgram->setInt("tex", 0);
+
 	// Loop until the user closes the window 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -87,6 +102,7 @@ int main(int argc, char** argv)
 		//Use our sahder program and draw triangle
 		defaultShaderProgram->use();
 		glBindVertexArray(vertexArrayObject);
+		tex->bind();
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 
 		// Swap front and back buffers 
@@ -124,21 +140,23 @@ void prepareShaders(GLuint& vao)
 	glBufferData(GL_ARRAY_BUFFER, sizeof(point), point, GL_STATIC_DRAW);
 
 	//Creating vertex buffer object of triangle point's color
-	GLuint colorsVertexBufferObject = 0;
-	glGenBuffers(1, &colorsVertexBufferObject);
-	glBindBuffer(GL_ARRAY_BUFFER, colorsVertexBufferObject);
+	GLuint colorsVbo = 0;
+	glGenBuffers(1, &colorsVbo);
+	glBindBuffer(GL_ARRAY_BUFFER, colorsVbo);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW);
 
 	//Generating and bind of vertex array object
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
 
+	//apply our shaders:
+	//points
 	glEnableVertexAttribArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, pointsVertexBufferObject);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
-
+	//colors
 	glEnableVertexAttribArray(1);
-	glBindBuffer(GL_ARRAY_BUFFER, colorsVertexBufferObject);
+	glBindBuffer(GL_ARRAY_BUFFER, colorsVbo);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
 }
 

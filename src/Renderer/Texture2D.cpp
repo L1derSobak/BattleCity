@@ -26,6 +26,7 @@ namespace Renderer
 			break;
 		}
 		glGenTextures(1, &ID);
+		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, ID);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, mode, GL_UNSIGNED_BYTE, data);
 
